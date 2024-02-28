@@ -1,12 +1,22 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from '../services/app.service';
+import { Controller, Get, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor() {}
 
-  @Get()
-  find(): Response<object> {
-    return this.appService.find();
+  @Get('/')
+  async init(): Promise<any> {
+    return ({
+      status: HttpStatus.OK,
+      message: 'welcome to the application school'
+    })
+  }
+
+  @Get('/test')
+  async test(): Promise<any> {
+    return ({
+      status: HttpStatus.OK,
+      message: 'welcome to the test route application school'
+    })
   }
 }
