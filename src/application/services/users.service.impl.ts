@@ -3,7 +3,6 @@ import { LoginDto } from "../dto/login.dto";
 import { UserDto } from "../dto/user.dto";
 import { UserService } from "./users.service";
 import { UserUseCase } from "src/domain/usecases/user.usecase";
-import { UUID } from "crypto";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
@@ -18,10 +17,10 @@ export class UserServiceImpl implements UserService {
   create(user: UserDto): Promise<User> {
     return this.userUseCase.create(user);
   }
-  updateAt(id: UUID, user: UserDto): Promise<boolean> {
+  updateAt(id: string, user: UserDto): Promise<boolean> {
     return this.userUseCase.update(id, user);
   }
-  delete(id: UUID): Promise<boolean> {
+  delete(id: string): Promise<boolean> {
     return this.userUseCase.delete(id);
   }
   

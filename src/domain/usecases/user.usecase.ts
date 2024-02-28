@@ -1,5 +1,4 @@
 import { Catch, HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { UUID } from "crypto";
 import { LoginDto } from "src/application/dto/login.dto";
 import { UserRepositoryImpl } from "src/infraestructure/repositories/user.repository.impl";
 import { User } from "../schemas/user.schema";
@@ -57,7 +56,7 @@ export class UserUseCase {
     }
   }
 
-  async update(id:UUID, user: UserDto): Promise<boolean> {
+  async update(id:string, user: UserDto): Promise<boolean> {
     try {
       const userUpdated = await this.usersRepository.updateAt(
         id,
@@ -80,7 +79,7 @@ export class UserUseCase {
     }
   }
 
-  async delete(id: UUID): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     try {
       const userDeleted = await this.usersRepository.delete(id);
       if(!userDeleted) throw new HttpException(`'El ID de usuario que estas intentando eliminar no existe`, HttpStatus.NOT_FOUND)

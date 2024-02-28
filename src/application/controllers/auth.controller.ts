@@ -1,4 +1,5 @@
-import { Controller } from '@nestjs/common';
+import { Catch, Controller, HttpException } from '@nestjs/common';
 
 @Controller()
+@Catch(HttpException)
 export class AuthController {}

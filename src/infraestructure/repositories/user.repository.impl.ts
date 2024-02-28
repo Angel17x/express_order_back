@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { UUID } from "crypto";
 import { Model } from "mongoose";
 import { LoginDto } from "src/application/dto/login.dto";
 import { UserDto } from "src/application/dto/user.dto";
@@ -28,12 +27,12 @@ export class UserRepositoryImpl implements UserRepository {
     return newUser.save();
   }
 
-  async updateAt(id: UUID, entity: UserDto): Promise<boolean> {
+  async updateAt(id: string, entity: UserDto): Promise<boolean> {
     const result = await this.userModel.findByIdAndUpdate(id, entity, { new: true }).exec();
     return result != null; // Devuelve true si se encontró y actualizó un documento, de lo contrario false
   }
 
-  async delete(id: UUID): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     const result = await this.userModel.findByIdAndDelete(id).exec();
     return result != null;
   }

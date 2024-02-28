@@ -17,13 +17,17 @@ export class HttpErrorFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
     const response = ctx.getResponse<Response>();
     const status = exception.getStatus();
+    const exceptionResponse = exception.getResponse();
+
+    // Este puede ser un string, un objeto o un array, dependiendo del error
+    const message = exceptionResponse instanceof Object ? exceptionResponse['message'] : exceptionResponse;
 
     const errorResponse = {
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,
       method: request.method,
-      message: exception.message || null,
+      message: message || 'Unexpected error occured', // Aquí se personaliza el mensaje de error
     };
 
     if (status === HttpStatus.INTERNAL_SERVER_ERROR) {

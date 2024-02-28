@@ -1,6 +1,7 @@
-import { Controller, Get, HttpStatus } from '@nestjs/common';
+import { Catch, Controller, Get, HttpException, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
 @Controller()
+@Catch(HttpException)
 export class AppController {
   constructor() {}
 
