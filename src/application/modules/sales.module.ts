@@ -5,7 +5,7 @@ import { SalesController } from '../controllers/sales.controller';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [],
+  controllers: [SalesController],
   providers: [
     AuthMiddleware
   ],
