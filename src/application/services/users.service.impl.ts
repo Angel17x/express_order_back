@@ -14,6 +14,9 @@ export class UserServiceImpl implements UserService {
   findAll(): Promise<User[]> {
     return this.userUseCase.findAll();
   }
+  findById(id: string): Promise<User> {
+    return this.userUseCase.findById(id);
+  }
   create(user: UserDto): Promise<User> {
     return this.userUseCase.create(user);
   }

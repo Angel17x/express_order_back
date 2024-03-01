@@ -10,24 +10,24 @@ export class AuthMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
     try {
       const token = (req.headers.authorization ?? '').split(' ')[1] ?? null;
-      console.log(token)
       if (!token){
         throw new HttpException(JwtEnum.FORBIDDEN, HttpStatus.FORBIDDEN);
       }
-      await this.jwtService.verify(token);
+      const user = await this.jwtService.verify(token);
+      req.user = user._doc;
       next();
     } catch (error) {
-      if (!error) throw new HttpException('Error al leer el token de acceso', HttpStatus.INTERNAL_SERVER_ERROR);
+      if (!error) throw new HttpException('Error reading access token', HttpStatus.INTERNAL_SERVER_ERROR);
       const err = error.name === 'HttpException' ? error.response : error.name;
       switch(err){
         case JwtEnum.ERROR:
-          throw new HttpException('Token de autenticación inválido', HttpStatus.BAD_REQUEST);
+          throw new HttpException('Invalid authentication token', HttpStatus.BAD_REQUEST);
         case JwtEnum.EXPIRE:
-          throw new HttpException('Token de autenticación expirado', HttpStatus.UNAUTHORIZED);
+          throw new HttpException('Expired authentication token', HttpStatus.UNAUTHORIZED);
         case JwtEnum.UNAUTHORIZED:
-          throw new HttpException('Token no proporcionado', HttpStatus.FORBIDDEN);
+          throw new HttpException('Token not provided', HttpStatus.FORBIDDEN);
         case JwtEnum.FORBIDDEN:
-          throw new HttpException('Token no proporcionado', HttpStatus.FORBIDDEN);
+          throw new HttpException('Token not provided', HttpStatus.FORBIDDEN);
         default:
           throw new HttpException('Error al verificar el token de autenticación', HttpStatus.INTERNAL_SERVER_ERROR);
       }

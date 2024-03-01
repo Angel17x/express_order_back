@@ -1,10 +1,10 @@
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserSchema } from 'src/domain/schemas/user.schema';
+import schemas from 'src/domain/schemas/schemas';
 
 export const databaseProviders = [
-  MongooseModule.forFeature([{name: 'User', schema: UserSchema }]),
+  MongooseModule.forFeature([...schemas]),
   MongooseModule.forRootAsync(
     {
       imports: [ConfigModule],

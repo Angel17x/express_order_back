@@ -13,11 +13,11 @@ export class UserUseCase {
     try {
       const { email, password } = user;
       const repoUser = await this.usersRepository.find({  email, password });
-      if (!repoUser) throw new HttpException('Este usuario no existe', HttpStatus.NOT_FOUND);
+      if (!repoUser) throw new HttpException('This user does not exist', HttpStatus.NOT_FOUND);
       return repoUser;
 
     } catch (error) {
-      if (!error) throw new HttpException('Error al buscar usuario', HttpStatus.INTERNAL_SERVER_ERROR);
+      if (!error) throw new HttpException('Error when searching for user', HttpStatus.INTERNAL_SERVER_ERROR);
       throw new HttpException(error.message, error.status ?? HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -28,30 +28,43 @@ export class UserUseCase {
       return repoUser;
 
     } catch (error) {
-      if (!error) throw new HttpException('Error al obtener los usuarios', HttpStatus.INTERNAL_SERVER_ERROR);
+      if (!error) throw new HttpException('Error getting users', HttpStatus.INTERNAL_SERVER_ERROR);
       throw new HttpException(error.message, error.status ?? HttpStatus.INTERNAL_SERVER_ERROR);
 
+    }
+  }
+
+  async findById(id: string): Promise<User> {
+    try {
+      const user = await this.usersRepository.findById(id);
+      if(!user) throw new HttpException(`User ID does not exist`, HttpStatus.NOT_FOUND)
+      return user;
+    } catch (error) {
+      if (!error) throw new HttpException('Error when searching for user', HttpStatus.INTERNAL_SERVER_ERROR);
+      if(error.name === 'QueryFailedError') throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status ?? HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   async create(user: UserDto): Promise<User> {
     try {
       const isExistsUser = await this.usersRepository.isExists(user.email);
-      if (isExistsUser) throw new HttpException('El usuario ya existe', HttpStatus.BAD_REQUEST);
+      if (isExistsUser) throw new HttpException('User is exists', HttpStatus.BAD_REQUEST);
       const newUser = await this.usersRepository.create(
         {
           name: user.name,
           lastname: user.lastname,
+          address: user.address,
+          identity: user.identity,
           email: user.email,
           password: user.password,
-          address: user.address,
           role: user.role
         }
       );
       return newUser;
 
     } catch (error) {
-      if (!error) throw new HttpException('Error al obtener los usuarios', HttpStatus.INTERNAL_SERVER_ERROR);
+      if (!error) throw new HttpException('Error getting users', HttpStatus.INTERNAL_SERVER_ERROR);
       throw new HttpException(error.message, error.status ?? HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -63,17 +76,18 @@ export class UserUseCase {
         {
           name: user.name,
           lastname: user.lastname,
+          address: user.address,
+          identity: user.identity,
           email: user.email,
           password: user.password,
-          address: user.address,
           role: user.role
         }
       );
-      if(!userUpdated) throw new HttpException('Error al actualizar el usuario', HttpStatus.INTERNAL_SERVER_ERROR)
+      if(!userUpdated) throw new HttpException('Error updating user', HttpStatus.INTERNAL_SERVER_ERROR)
       return userUpdated;
 
     } catch (error) {
-      if (!error) throw new HttpException('Error al actualizar el usuario', HttpStatus.INTERNAL_SERVER_ERROR);
+      if (!error) throw new HttpException('Error updating user', HttpStatus.INTERNAL_SERVER_ERROR);
       if(error.name === 'QueryFailedError') throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       throw new HttpException(error.message, error.status ?? HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -82,10 +96,10 @@ export class UserUseCase {
   async delete(id: string): Promise<boolean> {
     try {
       const userDeleted = await this.usersRepository.delete(id);
-      if(!userDeleted) throw new HttpException(`'El ID de usuario que estas intentando eliminar no existe`, HttpStatus.NOT_FOUND)
+      if(!userDeleted) throw new HttpException(`'The user ID you are trying to delete does not exist`, HttpStatus.NOT_FOUND)
       return userDeleted;
     } catch (error) {
-      if (!error) throw new HttpException('Error al eliminar el usuario', HttpStatus.INTERNAL_SERVER_ERROR);
+      if (!error) throw new HttpException('Error deleting user', HttpStatus.INTERNAL_SERVER_ERROR);
       if(error.name === 'QueryFailedError') throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       throw new HttpException(error.message, error.status ?? HttpStatus.INTERNAL_SERVER_ERROR);
     }

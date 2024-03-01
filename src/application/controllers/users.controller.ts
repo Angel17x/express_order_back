@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Logger, Post, Put, Query } from '@nestjs/common';
 import { User } from 'src/domain/schemas/user.schema';
 import { UserDto } from '../dto/user.dto';
 import { UserServiceImpl } from '../services/users.service.impl';
@@ -8,8 +8,8 @@ export class UsersController {
   constructor(private readonly userService: UserServiceImpl) {}
   
   @Get('/users')
-  getUsers(): Promise<User[]> {
-    return this.userService.findAll();
+  getUserById(@Query('id') id: string): Promise<any> {
+    return (id ? this.userService.findById(id) : this.userService.findAll());
   }
 
   @Post('/create-user')
