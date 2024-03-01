@@ -1,4 +1,4 @@
-import { Product } from "src/domain/schemas/Product.schema";
+import { Product } from "src/domain/schemas/product.schema";
 import { Injectable } from "@nestjs/common";
 import { ProductService } from "./product.service";
 import { ProductUseCase } from "src/domain/usecases/product.usecase";
