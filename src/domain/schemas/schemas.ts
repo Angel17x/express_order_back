@@ -1,4 +1,4 @@
-import { ProductSchema } from './Product.schema';
+import { ProductSchema } from './product.schema';
 import { SalesSchema } from './sales.schema';
 import { UserSchema } from './user.schema';
 
