@@ -15,7 +15,8 @@ import { SalesModule } from './sales.module';
     DatabaseModule, 
     UsersModule, 
     ProductsModule, 
-    AuthModule, SalesModule 
+    AuthModule, 
+    SalesModule 
   ],
   controllers: [AppController],
   providers: [],
