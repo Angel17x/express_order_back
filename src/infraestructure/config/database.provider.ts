@@ -31,7 +31,6 @@ export const databaseProviders = [
         const mongoOptions = configService.get<string>('MONGO_OPTIONS') ?? '';
         
         const mongoUri = `${mongoDbUri}${mongoUser}:${mongoPassword}@${mongoHost}:${mongoPort}/${mongoDb}${mongoOptions}`;
-        Logger.warn(mongoUri);
         return { uri: mongoUri };  
       },
       inject: [ConfigService],
