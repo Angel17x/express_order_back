@@ -30,7 +30,7 @@ export const databaseProviders = [
 
         const mongoOptions = configService.get<string>('MONGO_OPTIONS') ?? '';
         
-        const mongoUri = `${mongoDbUri}${mongoUser}:${mongoPassword}@${mongoHost}:${mongoPort}/${mongoDb}${mongoOptions}`;
+        const mongoUri = `${mongoDbUri}${mongoUser}:${mongoPassword}@${mongoHost}:${mongoPort}`;
         return { uri: mongoUri };  
       },
       inject: [ConfigService],
