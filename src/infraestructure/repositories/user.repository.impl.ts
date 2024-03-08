@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, Types } from "mongoose";
+import mongoose, { Model, Types } from "mongoose";
 import { LoginDto } from "src/application/dto/login.dto";
 import { UserDto } from "src/application/dto/user.dto";
 import { UserRepository } from "src/domain/repositories/user.repository";
@@ -24,7 +24,7 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   async create(entity: UserDto): Promise<User> {
-    const newUser = new this.userModel(entity);
+    const newUser = new this.userModel({_id: new mongoose.Types.ObjectId(), ...entity});
     return newUser.save();
   }
 

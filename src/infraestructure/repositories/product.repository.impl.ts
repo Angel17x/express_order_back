@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, Types } from "mongoose";
+import mongoose, { Model, Types } from "mongoose";
 import { CreateProductDto } from "src/application/dto/create.product.dto";
 import { ProductsWithEcommerceDto } from "src/application/dto/products-with-ecommerce.dto";
 import { ProductRepository } from "src/domain/repositories/product.repository";
@@ -23,7 +23,7 @@ export class ProductRepositoryImpl implements ProductRepository {
   }
 
   async create(entity: CreateProductDto): Promise<Product> {
-    const newUser = new this.productModel(entity);
+    const newUser = new this.productModel({_id: new mongoose.Types.ObjectId(), ...entity});
     return newUser.save();
   }
 

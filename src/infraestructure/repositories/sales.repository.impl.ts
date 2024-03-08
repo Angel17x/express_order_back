@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, Types } from "mongoose";
+import mongoose, { Model, Types } from "mongoose";
 import { CreateSalesDto } from "src/application/dto/create-sales.dto";
 import { CreateProductDto } from "src/application/dto/create.product.dto";
 import { ProductsWithEcommerceDto } from "src/application/dto/products-with-ecommerce.dto";
@@ -26,7 +26,7 @@ export class SalesRepositoryImpl implements SalesRepository {
   }
 
   async create(entity: CreateSalesDto): Promise<Sales> {
-    const newSale = new this.salesModel(entity);
+    const newSale = new this.salesModel({ _id: new mongoose.Types.ObjectId(), ...entity });
     return newSale.save();
   }
 
