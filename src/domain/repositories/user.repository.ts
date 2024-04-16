@@ -3,7 +3,7 @@ import { User } from "../schemas/user.schema";
 import { GenericRepository } from "./generic.repository";
 import { UserDto } from "src/application/dto/user.dto";
 
-export interface UserRepository extends GenericRepository<User> { 
+export interface UserRepository { 
   find(user: LoginDto): Promise<User>;
   findById(id: any): Promise<User | null>;
   findAll(): Promise<User[]>;

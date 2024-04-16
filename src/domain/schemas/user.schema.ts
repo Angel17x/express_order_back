@@ -29,8 +29,8 @@ export class User {
   @Prop()
   password: string;
 
-  @Prop({ type: String, enum: RoleEnum, default: RoleEnum.CLIENT })
-  role: RoleEnum;
+  @Prop({ type: String, /* enum: RoleEnum, default: RoleEnum.CLIENT*/ })
+  role?: RoleEnum;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

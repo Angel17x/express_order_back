@@ -22,10 +22,19 @@ export class UserUseCase {
     }
   }
 
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<any[]> {
     try {
       const repoUser = await this.usersRepository.findAll();
-      return repoUser;
+      const users = repoUser.map((user) => ({
+        id: user._id,
+        name: user.name,
+        lastname: user.lastname,
+        address: user.address,
+        identity: user.identity,
+        email: user.email,
+        role: user.role
+      }))
+      return users;
 
     } catch (error) {
       if (!error) throw new HttpException('Error getting users', HttpStatus.INTERNAL_SERVER_ERROR);

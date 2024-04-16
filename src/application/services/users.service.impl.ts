@@ -11,7 +11,7 @@ export class UserServiceImpl implements UserService {
   findEmailAndPassword(user: LoginDto): Promise<User> {
     return this.userUseCase.findEmailAndPassword(user);
   }
-  findAll(): Promise<User[]> {
+  findAll(): Promise<any[]> {
     return this.userUseCase.findAll();
   }
   findById(id: string): Promise<User> {

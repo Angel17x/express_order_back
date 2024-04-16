@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import schemas from 'src/domain/schemas/schemas';
 import { Logger } from '@nestjs/common';
+// import { mongo } from 'mongoose';
 
 export const databaseProviders = [
   MongooseModule.forFeature([...schemas]),
@@ -28,10 +29,10 @@ export const databaseProviders = [
         const mongoDb = configService.get<string>('MONGO_DB');
         if (!mongoDb) throw new Error('MONGO_DB is not defined in the configuration');
 
-        const mongoOptions = configService.get<string>('MONGO_OPTIONS') ?? '';
-        
+        // const mongoOptions = configService.get<string>('MONGO_OPTIONS') ?? '';
         const mongoUri = `${mongoDbUri}${mongoUser}:${mongoPassword}@${mongoHost}:${mongoPort}`;
-        return { uri: mongoUri };  
+        Logger.debug(mongoUri);
+        return { uri: mongoUri, dbName: mongoDb };  
       },
       inject: [ConfigService],
     }

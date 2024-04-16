@@ -5,7 +5,7 @@ import { LoginDto } from '../dto/login.dto';
 
 export interface UserService {
   findEmailAndPassword(user: LoginDto): Promise<User>;
-  findAll(): Promise<User[]>;
+  findAll(): Promise<any[]>;
   findById(id: string): Promise<User>;
   create(user: UserDto): Promise<User>;
   updateAt(id:string, user: UserDto): Promise<boolean>;

@@ -1,7 +1,6 @@
 import { Catch, HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { SalesRepositoryImpl } from "src/infraestructure/repositories/sales.repository.impl";
 import { Sales } from "../schemas/sales.schema";
-import { ProductsWithEcommerceDto } from "src/application/dto/products-with-ecommerce.dto";
 import { CreateSalesDto } from "src/application/dto/create-sales.dto";
 import { User } from "../schemas/user.schema";
 import { PaymentStatus } from "src/application/enums/payment-status";

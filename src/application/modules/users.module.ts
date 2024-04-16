@@ -21,8 +21,8 @@ import { JwtServiceImpl } from '../services/jwt.service.impl';
 })
 export class UsersModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
-    // consumer
-    //   .apply(AuthMiddleware)
-    //   .forRoutes(UsersController);
+    consumer
+      .apply(AuthMiddleware)
+      .forRoutes(UsersController);
   }
 }
