@@ -19,10 +19,11 @@ import { JwtServiceImpl } from '../services/jwt.service.impl';
   ],
   exports: [] // 
 })
-export class UsersModule implements NestModule{
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .forRoutes(UsersController);
-  }
+export class UsersModule 
+{
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer
+  //     .apply(AuthMiddleware)
+  //     .forRoutes(UsersController);
+  // }
 }
