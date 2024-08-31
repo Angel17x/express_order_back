@@ -1,4 +1,5 @@
-export enum RoleEnum {
-  ECOMMERCE = 'ecommerce',
-  CLIENT = 'client',
+export enum Role {
+  ECOMMERCE = 'ECOMMERCE',
+  CLIENT = 'CLIENT',
+  ADMIN = 'ADMIN',
 }

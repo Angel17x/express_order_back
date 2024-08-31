@@ -3,7 +3,7 @@ import { ProductRepositoryImpl } from "src/infraestructure/repositories/product.
 import { Product } from "../schemas/product.schema";
 import { CreateProductDto } from "src/application/dto/create.product.dto";
 import { UserRepositoryImpl } from "src/infraestructure/repositories/user.repository.impl";
-import { RoleEnum } from "src/application/enums/role.enum";
+import { Role } from "src/application/enums/role.enum";
 import { ProductsWithEcommerceDto } from "src/application/dto/products-with-ecommerce.dto";
 import { User } from "../schemas/user.schema";
 
@@ -19,7 +19,7 @@ export class ProductUseCase {
   async findAll(ecommerce: ProductsWithEcommerceDto): Promise<Product[]> {
     try {
       const isEcommerce = await this.userRepository.findSellerById(ecommerce.seller.toString());
-      if (isEcommerce !== RoleEnum.ECOMMERCE) throw new HttpException(`Seller is not ecommerce`, HttpStatus.BAD_REQUEST);
+      if (isEcommerce !== Role.ECOMMERCE) throw new HttpException(`Seller is not ecommerce`, HttpStatus.BAD_REQUEST);
       const repoProduct = await this.productRepository.findAll(ecommerce);
       return repoProduct;
 
@@ -33,7 +33,7 @@ export class ProductUseCase {
   async findById(id: string, ecommerce: ProductsWithEcommerceDto): Promise<Product> {
     try {
       const isEcommerce = await this.userRepository.findSellerById(ecommerce.seller.toString());
-      if (isEcommerce !== RoleEnum.ECOMMERCE) throw new HttpException(`Seller is not ecommerce`, HttpStatus.BAD_REQUEST);
+      if (isEcommerce !== Role.ECOMMERCE) throw new HttpException(`Seller is not ecommerce`, HttpStatus.BAD_REQUEST);
       const product = await this.productRepository.findById(id, ecommerce);
       if(!product) throw new HttpException(`Product ID does not exist`, HttpStatus.NOT_FOUND)
       return product;
@@ -49,7 +49,7 @@ export class ProductUseCase {
       if ((product?.seller ?? '') !== user._id.toString()) throw new HttpException(`Seller ID does not match the authenticated user's ID`, HttpStatus.BAD_REQUEST);
       const isExistsProduct = await this.productRepository.isExists(product.name);
       if (isExistsProduct) throw new HttpException('Product is exists', HttpStatus.BAD_REQUEST);
-      if (user.role !== RoleEnum.ECOMMERCE) throw new HttpException(`Seller is not ecommerce`, HttpStatus.BAD_REQUEST);
+      if (user.role !== Role.ECOMMERCE) throw new HttpException(`Seller is not ecommerce`, HttpStatus.BAD_REQUEST);
       const newProduct = await this.productRepository.create(
         {
           name: product.name,

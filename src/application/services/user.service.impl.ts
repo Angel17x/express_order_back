@@ -1,7 +1,7 @@
 import { User } from "src/domain/schemas/user.schema";
 import { LoginDto } from "../dto/login.dto";
 import { UserDto } from "../dto/user.dto";
-import { UserService } from "./users.service";
+import { UserService } from "./user.service";
 import { UserUseCase } from "src/domain/usecases/user.usecase";
 import { Injectable } from "@nestjs/common";
 

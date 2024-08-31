@@ -10,9 +10,7 @@ export class AuthMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
     try {
       const token = (req.headers.authorization ?? '').split(' ')[1] ?? null;
-      if (!token){
-        throw new HttpException(JwtEnum.FORBIDDEN, HttpStatus.FORBIDDEN);
-      }
+      if (!token) throw new HttpException(JwtEnum.FORBIDDEN, HttpStatus.FORBIDDEN);
       const user = await this.jwtService.verify(token);
       req.user = user._doc;
       next();

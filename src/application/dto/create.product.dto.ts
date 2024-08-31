@@ -1,7 +1,7 @@
 // create-product.dto.ts
 import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsMongoId, Min } from 'class-validator';
 import mongoose from 'mongoose';
-import { CategoryEnum } from 'src/application/enums/type-product.enum';
+import { Category } from 'src/application/enums';
 import { IsDecimal } from '../constraints/isdecimal.constraint';
 
 export class CreateProductDto {
@@ -10,8 +10,8 @@ export class CreateProductDto {
   name: string;
 
   @IsNotEmpty()
-  @IsEnum(CategoryEnum)
-  category: CategoryEnum;
+  @IsEnum(Category)
+  category: Category;
 
   @IsString()
   description: string;

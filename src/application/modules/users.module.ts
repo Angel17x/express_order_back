@@ -1,11 +1,12 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { DatabaseModule } from './database.module';
 import { UsersController } from '../controllers/users.controller';
 import { UserUseCase } from 'src/domain/usecases/user.usecase';
 import { UserRepositoryImpl } from 'src/infraestructure/repositories/user.repository.impl';
-import { UserServiceImpl } from '../services/users.service.impl';
-import { AuthMiddleware } from '../middlewares/auth.middleware';
-import { JwtServiceImpl } from '../services/jwt.service.impl';
+import { AuthMiddleware } from '../middlewares';
+import { JwtServiceImpl, UserServiceImpl } from '../services';
+import { createRolesMiddleware } from '../middlewares';
+import { Role } from '../enums/role.enum';
 
 @Module({
   imports: [DatabaseModule],
@@ -21,9 +22,9 @@ import { JwtServiceImpl } from '../services/jwt.service.impl';
 })
 export class UsersModule 
 {
-  // configure(consumer: MiddlewareConsumer) {
-  //   consumer
-  //     .apply(AuthMiddleware)
-  //     .forRoutes(UsersController);
-  // }
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware, createRolesMiddleware([Role.ADMIN]).use)
+      .forRoutes(UsersController);
+  }
 }

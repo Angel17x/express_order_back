@@ -2,7 +2,7 @@
 import * as mongoose from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { CategoryEnum } from 'src/application/enums/type-product.enum';
+import { Category } from 'src/application/enums';
 
 export type ProductDocument = Document & Product;
 
@@ -11,8 +11,8 @@ export class Product {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true, enum: Object.values(CategoryEnum) })
-  category: CategoryEnum;
+  @Prop({ required: true, enum: Object.values(Category) })
+  category: Category;
 
   @Prop()
   description: string;

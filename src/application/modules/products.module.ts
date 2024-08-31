@@ -8,6 +8,8 @@ import { UsersModule } from './users.module';
 import { UserRepositoryImpl } from 'src/infraestructure/repositories/user.repository.impl';
 import { AuthMiddleware } from '../middlewares/auth.middleware';
 import { JwtServiceImpl } from '../services/jwt.service.impl';
+import { createRolesMiddleware } from '../middlewares';
+import { Role } from '../enums/role.enum';
 
 @Module({
   imports: [DatabaseModule, UsersModule],
@@ -24,7 +26,7 @@ import { JwtServiceImpl } from '../services/jwt.service.impl';
 export class ProductsModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-    .apply(AuthMiddleware)
+    .apply(AuthMiddleware, createRolesMiddleware([Role.ECOMMERCE]).use)
     .forRoutes(ProductsController);
   }
 }

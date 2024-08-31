@@ -16,6 +16,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe(globalPipeOptions));
   app.useGlobalFilters(new HttpErrorFilter());
+  app.setGlobalPrefix(`${process.env.SERVER_GLOBAL_PREFIX}/${process.env.SERVER_VERSION}`);
 
   const port = process.env.PORT || 80;
   
