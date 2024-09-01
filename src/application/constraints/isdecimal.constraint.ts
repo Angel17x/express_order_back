@@ -2,7 +2,6 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
   ValidationArguments,
-  Validate,
   IsNotEmpty,
   IsNumber,
   Min,

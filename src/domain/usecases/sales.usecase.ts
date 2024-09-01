@@ -44,7 +44,6 @@ export class SalesUseCase {
       const newSale = await this.salesRepository.create(
         {
           userid: sale.userid,
-          ecommerceId: sale.ecommerceId,
           productsId: sale.productsId,
           bank: sale.bank,
           reference: sale.reference,

@@ -14,10 +14,6 @@ export class CreateSalesDto {
   @IsString()
   userid: string;
 
-  @IsNotEmpty()
-  @IsMongoId()
-  ecommerceId: string;
-
   @IsArray()
   @ArrayMinSize(1)
   @IsMongoId({ each: true })

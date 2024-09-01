@@ -7,6 +7,7 @@ import { LoggerMiddleware } from '../middlewares/logger.middleware';
 import { ProductsModule } from './products.module';
 import { AuthModule } from './auth.module';
 import { SalesModule } from './sales.module';
+import { FileModule } from './file.module';
 
 @Module({
   imports: 
@@ -16,7 +17,8 @@ import { SalesModule } from './sales.module';
     UsersModule, 
     ProductsModule, 
     AuthModule, 
-    SalesModule 
+    SalesModule,
+    FileModule
   ],
   controllers: [AppController],
   providers: [],

@@ -26,7 +26,7 @@ import { Role } from '../enums/role.enum';
 export class ProductsModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-    .apply(AuthMiddleware, createRolesMiddleware([Role.ECOMMERCE]).use)
+    .apply(AuthMiddleware, createRolesMiddleware([Role.ECOMMERCE, Role.ADMIN]).use)
     .forRoutes(ProductsController);
   }
 }

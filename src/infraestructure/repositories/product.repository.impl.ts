@@ -9,9 +9,6 @@ import { Product } from "src/domain/schemas/product.schema";
 @Injectable()
 export class ProductRepositoryImpl implements ProductRepository {
   constructor(@InjectModel(Product.name) private productModel: Model<Product>){}
-  find(model: Product): Promise<Product> {
-    throw new Error("Method not implemented.");
-  }
 
   async findById(id: string, ecommerce: ProductsWithEcommerceDto): Promise<Product | null> {
     const _id = new Types.ObjectId(id);

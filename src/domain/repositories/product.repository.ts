@@ -3,7 +3,6 @@ import { Product } from "../schemas/product.schema";
 import { CreateProductDto } from "src/application/dto/create.product.dto";
 
 export interface ProductRepository { 
-  find(product: CreateProductDto): Promise<Product>;
   findById(id: any, ecommerce: ProductsWithEcommerceDto): Promise<Product | null>;
   findAll(ecommerce: ProductsWithEcommerceDto): Promise<Product[]>;
   create(product: CreateProductDto): Promise<Product>;

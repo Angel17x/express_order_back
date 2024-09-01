@@ -12,8 +12,8 @@ export class Sales {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   userId: mongoose.Types.ObjectId;
 
-  @Prop()
-  ecommerceId: mongoose.Types.ObjectId;
+  // @Prop()
+  // ecommerceId: mongoose.Types.ObjectId;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }] })
   productsId: mongoose.Types.ObjectId[]

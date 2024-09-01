@@ -46,7 +46,7 @@ export class ProductUseCase {
 
   async create(product: CreateProductDto, user: User): Promise<Product> {
     try {
-      if ((product?.seller ?? '') !== user._id.toString()) throw new HttpException(`Seller ID does not match the authenticated user's ID`, HttpStatus.BAD_REQUEST);
+      if (product.seller !== user._id) throw new HttpException(`Seller ID does not match the authenticated user's ID`, HttpStatus.BAD_REQUEST);
       const isExistsProduct = await this.productRepository.isExists(product.name);
       if (isExistsProduct) throw new HttpException('Product is exists', HttpStatus.BAD_REQUEST);
       if (user.role !== Role.ECOMMERCE) throw new HttpException(`Seller is not ecommerce`, HttpStatus.BAD_REQUEST);

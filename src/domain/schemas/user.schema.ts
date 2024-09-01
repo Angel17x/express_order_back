@@ -1,6 +1,6 @@
 // user.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document } from 'mongoose';
+import mongoose, { Document, Types } from 'mongoose';
 import { Role } from 'src/application/enums/role.enum';
 
 
@@ -9,7 +9,7 @@ export type UserDocument = Document & User;
 @Schema()
 export class User {
   @Prop()
-  _id: mongoose.Types.ObjectId
+  _id: Types.ObjectId
 
   @Prop()
   name: string;

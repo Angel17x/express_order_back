@@ -1,6 +1,6 @@
 // create-product.dto.ts
 import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsMongoId, Min } from 'class-validator';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { Category } from 'src/application/enums';
 import { IsDecimal } from '../constraints/isdecimal.constraint';
 
@@ -35,6 +35,6 @@ export class CreateProductDto {
   brand: string;
 
   @IsNotEmpty()
-  @IsMongoId()
-  seller: mongoose.Schema.Types.ObjectId;
+  seller: Types.ObjectId;
+
 }

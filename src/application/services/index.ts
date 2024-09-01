@@ -6,3 +6,4 @@ export { UserService } from './user.service';
 export { UserServiceImpl } from './user.service.impl';
 export { ProductService } from './product.service';
 export { ProductServiceImpl } from './product.service.impl';
+export { FileServiceImpl } from './file.service.impl';
