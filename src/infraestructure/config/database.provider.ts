@@ -6,7 +6,6 @@ import { Logger } from '@nestjs/common';
 // import { mongo } from 'mongoose';
 
 export const databaseProviders = [
-  MongooseModule.forFeature([...schemas]),
   MongooseModule.forRootAsync({
     imports: [ConfigModule],
     useFactory: async (configService: ConfigService) => {
@@ -36,14 +35,15 @@ export const databaseProviders = [
       if (!mongoDb)
         throw new Error('MONGO_DB is not defined in the configuration');
 
-      // const mongoOptions = configService.get<string>('MONGO_OPTIONS') ?? '';
+      const mongoOptions = configService.get<string>('MONGO_OPTIONS') ?? '';
       let mongoUri = `${mongoDbUri}${mongoUser}:${mongoPassword}@${mongoHost}:${mongoPort}`;
       if (!server_env || server_env === 'local') {
-        mongoUri = `${mongoDbUri}${mongoHost}:${mongoPort}`;
+        mongoUri = `${mongoDbUri}${mongoHost}:${mongoPort}${mongoOptions}`;
       }
       Logger.debug(mongoUri);
       return { uri: mongoUri, dbName: mongoDb };
     },
     inject: [ConfigService],
   }),
+  MongooseModule.forFeature([...schemas]),
 ];
