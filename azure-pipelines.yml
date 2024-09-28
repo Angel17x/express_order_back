@@ -33,7 +33,7 @@ steps:
 # Despliegue a Azure App Service
 - task: AzureWebApp@1
   inputs:
-    azureSubscription: '<Azure-Subscription-Name>'  # Reemplaza esto con el nombre de tu suscripción
+    azureSubscription: 'Azure subscription 1'  # Reemplaza esto con el nombre de tu suscripción
     appType: 'webAppLinux'
     appName: '<Your-App-Service-Name>'  # Reemplaza esto con el nombre de tu servicio de aplicación
     runtimeStack: 'NODE|20.x'
