@@ -1,0 +1,41 @@
+trigger:
+  branches:
+    include:
+    - main  # Asegúrate de que este es el nombre de tu rama principal
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '20.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'npm install and build'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: 'src/*, public/*'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  displayName: 'Copy project files'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    ArtifactName: 'nodejs-artifact'
+    TargetPath: '$(Build.ArtifactStagingDirectory)'
+  displayName: 'Publish npm artifact'
+
+# Despliegue a Azure App Service
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: '<Azure-Subscription-Name>'  # Reemplaza esto con el nombre de tu suscripción
+    appType: 'webAppLinux'
+    appName: '<Your-App-Service-Name>'  # Reemplaza esto con el nombre de tu servicio de aplicación
+    runtimeStack: 'NODE|20.x'
+    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+  displayName: 'Deploy to Azure App Service'
