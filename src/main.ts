@@ -21,6 +21,6 @@ async function bootstrap() {
   const port = process.env.PORT || 80;
   
   await app.listen(port, '0.0.0.0'); 
-  Logger.log(`Server:${process.env.NODE_ENV} is running on ${port}`, 'Bootstrap');
+  Logger.log(`Server : ${process.env.NODE_ENV} is running on ${port}`, 'Bootstrap');
 }
 bootstrap();
