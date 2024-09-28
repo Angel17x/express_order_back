@@ -28,7 +28,7 @@ export const databaseProviders = [
         throw new Error('MONGO_HOST is not defined in the configuration');
 
       const mongoPort = configService.get<string>('MONGO_PORT');
-      if (!mongoPort)
+      if (server_env === 'local' && !mongoPort)
         throw new Error('MONGO_PORT is not defined in the configuration');
 
       const mongoDb = configService.get<string>('MONGO_DB');
@@ -36,7 +36,8 @@ export const databaseProviders = [
         throw new Error('MONGO_DB is not defined in the configuration');
 
       const mongoOptions = configService.get<string>('MONGO_OPTIONS') ?? '';
-      let mongoUri = `${mongoDbUri}${mongoUser}:${mongoPassword}@${mongoHost}:${mongoPort}`;
+
+      let mongoUri = `${mongoDbUri}${mongoUser}:${mongoPassword}@${mongoHost}${mongoOptions}`;
       if (!server_env || server_env === 'local') {
         mongoUri = `${mongoDbUri}${mongoHost}:${mongoPort}${mongoOptions}`;
       }
