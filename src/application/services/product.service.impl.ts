@@ -16,8 +16,8 @@ export class ProductServiceImpl implements ProductService {
   findById(id: string, ecommerce: ProductsWithEcommerceDto): Promise<Product> {
     return this.productUseCase.findById(id, ecommerce);
   }
-  create(product: CreateProductDto, user:User): Promise<Product> {
-    return this.productUseCase.create(product, user);
+  create(product: CreateProductDto, user:User, file: Express.Multer.File): Promise<Product> {
+    return this.productUseCase.create(product, user, file);
   }
   updateAt(id: string, product: CreateProductDto, user:User): Promise<boolean> {
     return this.productUseCase.update(id, product, user);

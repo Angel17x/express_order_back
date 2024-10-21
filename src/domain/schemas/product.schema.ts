@@ -32,7 +32,7 @@ export class Product {
   @Prop()
   brand: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Product' })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   seller: mongoose.Schema.Types.ObjectId;
 
 }

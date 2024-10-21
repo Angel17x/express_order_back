@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, HttpCode, HttpStatus, Post, Put, Query, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, HttpCode, HttpStatus, Post, Put, Query, Req, Res, UploadedFile, UseGuards } from '@nestjs/common';
 import { ProductServiceImpl } from '../services/product.service.impl';
 import { CreateProductDto } from '../dto/create.product.dto';
 import { Product } from 'src/domain/schemas/product.schema';
@@ -23,8 +23,12 @@ export class ProductsController {
   }
 
   @Post('/create-product')
-  async create(@Body() product: CreateProductDto, @Req() req: Request, @Res() res: Response): Promise<Response<Product>> {
-    const result = await this.productService.create(product, req.user);
+  async create(
+    @Body() product: CreateProductDto,
+    @UploadedFile() file: Express.Multer.File, 
+    @Req() req: Request, 
+    @Res() res: Response): Promise<Response<Product>> {
+    const result = await this.productService.create(product, req.user, file);
     return res.status(HttpStatus.OK).json(result);
   }
 

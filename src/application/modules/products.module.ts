@@ -10,12 +10,14 @@ import { AuthMiddleware } from '../middlewares/auth.middleware';
 import { JwtServiceImpl } from '../services/jwt.service.impl';
 import { createRolesMiddleware } from '../middlewares';
 import { Role } from '../enums/role.enum';
+import { UploadUseCase } from 'src/domain/usecases/upload.usecase';
 
 @Module({
   imports: [DatabaseModule, UsersModule],
   controllers: [ ProductsController ],
   providers: [
     ProductUseCase,
+    UploadUseCase,
     ProductRepositoryImpl,
     UserRepositoryImpl,
     ProductServiceImpl,

@@ -6,6 +6,7 @@ import { UserRepositoryImpl } from "src/infraestructure/repositories/user.reposi
 import { Role } from "src/application/enums/role.enum";
 import { ProductsWithEcommerceDto } from "src/application/dto/products-with-ecommerce.dto";
 import { User } from "../schemas/user.schema";
+import { UploadUseCase } from "./upload.usecase";
 
 @Injectable()
 @Catch(HttpException)
@@ -13,6 +14,7 @@ export class ProductUseCase {
   constructor(
     private readonly productRepository: ProductRepositoryImpl,
     private readonly userRepository: UserRepositoryImpl,
+    private readonly uploadfile: UploadUseCase
   ) { }
 
 
@@ -44,19 +46,20 @@ export class ProductUseCase {
     }
   }
 
-  async create(product: CreateProductDto, user: User): Promise<Product> {
+  async create(product: CreateProductDto, user: User, file: Express.Multer.File): Promise<Product> {
     try {
       if (product.seller !== user._id) throw new HttpException(`Seller ID does not match the authenticated user's ID`, HttpStatus.BAD_REQUEST);
       const isExistsProduct = await this.productRepository.isExists(product.name);
       if (isExistsProduct) throw new HttpException('Product is exists', HttpStatus.BAD_REQUEST);
       if (user.role !== Role.ECOMMERCE) throw new HttpException(`Seller is not ecommerce`, HttpStatus.BAD_REQUEST);
+      const fileUrl = await this.uploadfile.uploadFile(user._id.toString(), `product/${product.name}`, file)
       const newProduct = await this.productRepository.create(
         {
           name: product.name,
           category: product.category,
           description: product.description,
           price: product.price,
-          imageUrl: product.imageUrl,
+          imageUrl: fileUrl,
           stock: product.stock,
           brand: product.brand,
           seller: product.seller
