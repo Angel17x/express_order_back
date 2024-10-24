@@ -2,6 +2,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, Types } from 'mongoose';
 import { Role } from 'src/application/enums/role.enum';
+import { ISocial } from '../entities/social.entity';
 
 
 export type UserDocument = Document & User;
@@ -31,6 +32,15 @@ export class User {
 
   @Prop({ type: String, /* enum: Role, default: Role.CLIENT*/ })
   role?: Role;
+
+  @Prop({
+    type: String
+  })
+  avatar?: String;
+
+  @Prop({ type: Array<Object> })
+  social?: ISocial[];
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -1,4 +1,4 @@
-import { IsEmail, IsString, Matches, MinLength, IsEnum } from "class-validator";
+import { IsEmail, IsString, Matches, MinLength, IsEnum, IsOptional } from "class-validator";
 import { Role } from "../enums/role.enum";
 
 export class UserDto {
@@ -25,7 +25,11 @@ export class UserDto {
   @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[.#@$&*])[A-Za-z\d.#@$&*]{8,}$/)
   password: string;
 
-  @IsString()
+  @IsOptional()
   @IsEnum(Role)
   role: Role;
+
+  @IsOptional()
+  @IsString()
+  avatar?: string;
 }

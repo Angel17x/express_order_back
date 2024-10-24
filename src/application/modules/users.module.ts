@@ -16,7 +16,7 @@ import { Role } from '../enums/role.enum';
     UserRepositoryImpl, 
     UserServiceImpl, 
     AuthMiddleware, 
-    JwtServiceImpl
+    JwtServiceImpl,
   ],
   exports: [] // 
 })

@@ -23,7 +23,7 @@ export class AuthServiceImpl implements AuthService {
     return token;
   }
 
-  async registerUser(user: UserDto): Promise<User> {
-    return await this.authUseCase.register(user);
+  async registerUser(user: UserDto, file: Express.Multer.File): Promise<User> {
+    return await this.authUseCase.register(user, file);
   }
 }

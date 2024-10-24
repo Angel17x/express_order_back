@@ -22,7 +22,6 @@ export class CreateProductDto {
   @IsDecimal({ message: 'price is not a valid decimal number.' })
   price: number;
 
-  @IsOptional()
   @IsString()
   imageUrl?: string;
 

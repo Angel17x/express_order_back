@@ -13,15 +13,15 @@ export class UploadUseCase {
     this.containerStorage = this.configService.get<string>('AZURE_STORAGE_CONTAINER');
   }
 
-  async uploadFile(userId: string, folderType: string, file: Express.Multer.File): Promise<string> {
+  async uploadFile(userId: string, folderType: string, file: Express.Multer.File, name?:string): Promise<string> {
     try {
       if(!file) throw new HttpException('No se ha adjuntado un archivo', HttpStatus.BAD_REQUEST);
       const containerClient = this.blobServiceClient.getContainerClient(this.containerStorage);
       const containerIsExists = await containerClient.exists();
       if(!containerIsExists) throw new HttpException(`container '${this.containerStorage}' is not exists`, HttpStatus.BAD_REQUEST);
-      const blockBlobClient = containerClient.getBlockBlobClient(`${userId}/${folderType}/${file.originalname}`);
+      const blockBlobClient = containerClient.getBlockBlobClient(`${userId}/${folderType}/${name ?? file.originalname}`);
       const fileExists = await blockBlobClient.exists();
-      if(fileExists) throw new HttpException(`file '${file.originalname}' is exists`, HttpStatus.BAD_REQUEST);
+      if(fileExists) throw new HttpException(`file '${name ?? file.originalname}' is exists`, HttpStatus.BAD_REQUEST);
 
       // Subir los datos al blob
       await blockBlobClient.uploadData(file.buffer, {
