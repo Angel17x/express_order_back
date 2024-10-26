@@ -25,7 +25,6 @@ export class UserDto {
   @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[.#@$&*])[A-Za-z\d.#@$&*]{8,}$/)
   password: string;
 
-  @IsOptional()
   @IsEnum(Role)
   role: Role;
 

@@ -52,17 +52,18 @@ export class ProductUseCase {
       const isExistsProduct = await this.productRepository.isExists(product.name);
       if (isExistsProduct) throw new HttpException('Product is exists', HttpStatus.BAD_REQUEST);
       if (user.role !== Role.ECOMMERCE) throw new HttpException(`Seller is not ecommerce`, HttpStatus.BAD_REQUEST);
-      const fileUrl = await this.uploadfile.uploadFile(user._id.toString(), `product/${product.name}`, file)
+      if(!file) throw new HttpException('No se ha adjuntado un archivo', HttpStatus.NOT_FOUND);
+      const fileUrl = await this.uploadfile.uploadFile(user._id.toString(), `product`, file, product.name)
       const newProduct = await this.productRepository.create(
         {
           name: product.name,
           category: product.category,
           description: product.description,
           price: product.price,
-          imageUrl: fileUrl,
           stock: product.stock,
           brand: product.brand,
-          seller: product.seller
+          seller: product.seller,
+          imageUrl: fileUrl,
         }
       );
       return newProduct;

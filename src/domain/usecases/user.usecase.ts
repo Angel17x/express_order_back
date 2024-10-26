@@ -32,7 +32,8 @@ export class UserUseCase {
         address: user.address,
         identity: user.identity,
         email: user.email,
-        role: user.role
+        role: user.role,
+        avatar: user.avatar
       }))
       return users;
 

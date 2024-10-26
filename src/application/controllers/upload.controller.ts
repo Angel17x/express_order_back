@@ -1,4 +1,4 @@
-import { Controller, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AzureStorageServiceImpl } from '../services';
 import { FileQueryDto } from '../dto/file-query.dto';
@@ -20,8 +20,9 @@ export class UploadController {
   @UseInterceptors(FileInterceptor('file'))
   async updateFile(
     @Query() path: FileQueryDto,
-    @UploadedFile() file: Express.Multer.File) {
-    const response = await this.azureStorageService.updateFile(path.userId, path.folderType, file);
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body:{ oldname: string, newName:string }) {
+    const response = await this.azureStorageService.updateFile(path.userId, path.folderType, file, body.oldname, body.newName);
     return { message: 'File uploaded successfully', requestId: response };
   }
 }

@@ -35,27 +35,38 @@ export class UploadUseCase {
     }
   }
 
-  async updateFile(userId: string, folderType: string, file: Express.Multer.File): Promise<string> {
+  async updateFile(userId: string, folderType: string, file: Express.Multer.File, oldName: string, newName: string): Promise<string> {
     try {
-      if(!file) throw new HttpException('No se ha adjuntado un archivo', HttpStatus.BAD_REQUEST);
+      if (!file) {
+        throw new HttpException('No se ha adjuntado un archivo', HttpStatus.BAD_REQUEST);
+      }
+
       const containerClient = this.blobServiceClient.getContainerClient(this.containerStorage);
-      const containerIsExists = await containerClient.exists();
-      if(!containerIsExists) throw new HttpException(`container '${this.containerStorage}' is not exists`, HttpStatus.BAD_REQUEST);
-      const blockBlobClient = containerClient.getBlockBlobClient(`${userId}/${folderType}/${file.filename}`);
-      const isDeleted = await this.deleteAllFilesInFolder(userId, folderType);
-      if(!isDeleted) throw new HttpException('update file error failure (delete files in folder not complete)', HttpStatus.INTERNAL_SERVER_ERROR);
-      // Subir los datos al blob
-      await blockBlobClient.uploadData(file.buffer, {
+      const containerExists = await containerClient.exists();
+      if (!containerExists) {
+        throw new HttpException(`El contenedor '${this.containerStorage}' no existe`, HttpStatus.BAD_REQUEST);
+      }
+
+      // Eliminar el archivo viejo si existe
+      const oldBlobClient = containerClient.getBlockBlobClient(`${userId}/${folderType}/${oldName}`);
+      const oldBlobExists = await oldBlobClient.exists();
+      if (oldBlobExists) {
+        await oldBlobClient.delete();
+      }
+
+      // Subir el nuevo archivo
+      const newBlobClient = containerClient.getBlockBlobClient(`${userId}/${folderType}/${newName}`);
+      await newBlobClient.uploadData(file.buffer, {
         blobHTTPHeaders: { blobContentType: file.mimetype },
       });
 
-      return blockBlobClient.url;
+      return newBlobClient.url;
     } catch (error) {
-      if (!error) throw new HttpException('Error upload file', HttpStatus.INTERNAL_SERVER_ERROR);
+      // Proporcionar una respuesta de error más específica basada en el error capturado
       throw new HttpException(error.message, error.status ?? HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
+  
   private async deleteAllFilesInFolder(userId: string, folderType: string): Promise<boolean> {
     try {
         const containerClient = this.blobServiceClient.getContainerClient(this.containerStorage);

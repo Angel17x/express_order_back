@@ -22,9 +22,6 @@ export class CreateProductDto {
   @IsDecimal({ message: 'price is not a valid decimal number.' })
   price: number;
 
-  @IsString()
-  imageUrl?: string;
-
   @IsOptional()
   @IsNumber()
   @Min(0)
@@ -36,4 +33,7 @@ export class CreateProductDto {
   @IsNotEmpty()
   seller: Types.ObjectId;
 
+  
+  @IsString()
+  imageUrl?: string;
 }

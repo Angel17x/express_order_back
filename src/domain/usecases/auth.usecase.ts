@@ -29,9 +29,8 @@ export class AuthUseCase {
     try {
       if(!user) throw new HttpException('el usuario es requerido', HttpStatus.BAD_REQUEST);
       const isExistsUser = await this.usersRepository.isExists(user.email);
-      if(isExistsUser) {
-        throw new HttpException('Este usuario ya existe', HttpStatus.BAD_REQUEST);
-      }
+      if(isExistsUser) throw new HttpException('Este usuario ya existe', HttpStatus.BAD_REQUEST);
+      if(!file) throw new HttpException('No se ha adjuntado un archivo', HttpStatus.BAD_REQUEST);
       const repoUser = await this.usersRepository.create(user);
       const avatarUrl = await this.uploadUseCase.uploadFile((repoUser._id).toString(), 'user', file, 'avatar');
       repoUser.avatar = avatarUrl;
