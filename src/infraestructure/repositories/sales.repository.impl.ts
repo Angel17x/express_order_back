@@ -2,9 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import mongoose, { Model, Types } from "mongoose";
 import { CreateSalesDto } from "src/application/dto/create-sales.dto";
-import { CreateProductDto } from "src/application/dto/create.product.dto";
-import { ProductsWithEcommerceDto } from "src/application/dto/products-with-ecommerce.dto";
-import { ProductRepository } from "src/domain/repositories/product.repository";
 import { SalesRepository } from "src/domain/repositories/sales.repository";
 import { Sales } from "src/domain/schemas/sales.schema";
 

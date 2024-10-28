@@ -6,6 +6,7 @@ import { User } from 'src/domain/schemas/user.schema';
 import { LoginDto } from '../dto/login.dto';
 import { AuthUseCase } from 'src/domain/usecases/auth.usecase';
 import { UserDto } from '../dto/user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
 
 @Injectable()
 export class AuthServiceImpl implements AuthService {
@@ -13,6 +14,9 @@ export class AuthServiceImpl implements AuthService {
     private readonly authUseCase: AuthUseCase,
     private readonly jwtService: JwtServiceImpl,
   ) {}
+  updateInfo(id:string, user: UpdateUserDto, file: Express.Multer.File): Promise<User> {
+    return this.authUseCase.updateInfo(id, user, file);
+  }
   async login(user: LoginDto): Promise<AuthEntity> {
     const repoUser = await this.authUseCase.auth(user);
     return this.generateToken(repoUser);

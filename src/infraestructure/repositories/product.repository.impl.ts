@@ -2,7 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import mongoose, { Model, Types } from "mongoose";
 import { CreateProductDto } from "src/application/dto/create.product.dto";
-import { ProductsWithEcommerceDto } from "src/application/dto/products-with-ecommerce.dto";
+import { UpdateProductDto } from "src/application/dto/update.product.dto";
+import { Weight } from "src/application/dto/weight.dto";
 import { ProductRepository } from "src/domain/repositories/product.repository";
 import { Product } from "src/domain/schemas/product.schema";
 
@@ -10,23 +11,25 @@ import { Product } from "src/domain/schemas/product.schema";
 export class ProductRepositoryImpl implements ProductRepository {
   constructor(@InjectModel(Product.name) private productModel: Model<Product>){}
 
-  async findById(id: string, ecommerce: ProductsWithEcommerceDto): Promise<Product | null> {
+  async findById(id: string, seller: string): Promise<Product | null> {
     const _id = new Types.ObjectId(id);
-    return this.productModel.findOne({ _id, ...ecommerce }).exec();
+    return this.productModel.findOne({ _id, seller }, '-__v').populate({ path: 'seller', select: '-password -__v' }).exec();
   }
 
-  async findAll(ecommerce: ProductsWithEcommerceDto): Promise<Product[]> {
-    return this.productModel.find({ ...ecommerce }).exec();
+  async findAll(seller: string): Promise<Product[]> {
+    return await this.productModel.find({ seller }, '-__v').populate({ path: 'seller', select: '-password -__v' }).exec();
   }
 
   async create(entity: CreateProductDto): Promise<Product> {
-    const newUser = new this.productModel({_id: new mongoose.Types.ObjectId(), ...entity});
+    const data = { ...entity, weight: { weight: entity.weight, type: entity.type } }
+    const newUser = new this.productModel({_id: new mongoose.Types.ObjectId(), ...data});
     return newUser.save();
   }
 
-  async updateAt(id: string, entity: CreateProductDto): Promise<boolean> {
+  async updateAt(id: string, entity: UpdateProductDto): Promise<boolean> {
     const _id = new Types.ObjectId(id);
-    const result = await this.productModel.findByIdAndUpdate(_id, entity, { new: true }).exec();
+    const data = { ...entity, weight: { weight: entity.weight, type: entity.type } }
+    const result = await this.productModel.findByIdAndUpdate(_id, data, { new: true }).exec();
     return result != null; // Devuelve true si se encontró y actualizó un documento, de lo contrario false
   }
 

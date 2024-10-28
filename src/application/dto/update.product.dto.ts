@@ -1,54 +1,58 @@
 // create-product.dto.ts
-import { Transform } from 'class-transformer';
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Matches, Max, Min, ValidateNested } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 import { Category } from 'src/application/enums';
-import { IWeight } from 'src/domain/entities/weight.entity';
+import { Transform } from 'class-transformer';
 import { Type } from '../enums/types.enum';
 
-export class CreateProductDto {
-  @IsNotEmpty()
+export class UpdateProductDto {
+  @IsOptional()
   @IsString()
-  name: string;
+  name?: string;
 
+  @IsOptional()
   @IsNotEmpty()
   @IsEnum(Category)
-  category: Category;
+  category?: Category;
 
+  @IsOptional()
   @IsString()
-  description: string;
+  description?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @Transform(({ value }) => parseFloat(value))
   @IsNumber({}, { message: 'Price must be a valid number.' })
   @Min(0)
-  price: number;
+  price?: number;
 
+  @IsOptional()
   @IsNumber()
   @Min(0)
   stock?: number;
 
+  @IsOptional()
   @IsString()
-  brand: string;
+  brand?: string;
 
-  @IsNotEmpty()
-  seller: string;
-
-  @IsNotEmpty()
+  @IsOptional()
   @Transform(({ value }) => parseFloat(value))
   @Max(5)
   @Min(0)
   @IsNumber({}, { message: 'rating must be a valid number.' })
-  rating:number;
+  rating?:number;
 
+  @IsOptional()
   @IsNotEmpty()
   @IsEnum(Type)
-  type: Type;
+  type?: Type;
 
+  @IsOptional()
   @IsNotEmpty()
-  weight: number;
-  
+  weight?: number;
+
   @IsString()
   @IsOptional()
   imageUrl?: string;
 
+  @IsNotEmpty()
+  seller: string;
 }

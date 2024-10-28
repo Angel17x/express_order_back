@@ -4,6 +4,7 @@ import { User } from '../schemas/user.schema';
 import { UserRepositoryImpl } from 'src/infraestructure/repositories/user.repository.impl';
 import { UserDto } from 'src/application/dto/user.dto';
 import { UploadUseCase } from './upload.usecase';
+import { UpdateUserDto } from 'src/application/dto/update-user.dto';
 
 @Injectable()
 @Catch(HttpException)
@@ -47,6 +48,35 @@ export class AuthUseCase {
       return repoUser;
     } catch (error) {
       if (!error) throw new HttpException('Error al registrar al usuario', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(error.message, error.status ?? HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async updateInfo(id: string, user: UpdateUserDto, file?: Express.Multer.File): Promise<User> {
+    try {
+      console.log(id)
+      if(!id) throw new HttpException('ID de usuario autenticado no existe', HttpStatus.BAD_REQUEST);
+      if(!user) throw new HttpException('el usuario es requerido', HttpStatus.BAD_REQUEST);
+      const repoUser = await this.usersRepository.findById(id);
+      console.log(repoUser);
+      if(!repoUser) throw new HttpException('El ID que intentas modificar no pertenece al usuario logeado', HttpStatus.NOT_FOUND);
+      if(file){
+        const avatarUrl = await this.uploadUseCase.updateFile((repoUser._id).toString(), 'user', file, 'avatar', 'avatar');
+        user.avatar = avatarUrl;
+      }
+      await this.usersRepository.updateAt(id, {
+        name: user.name ?? repoUser.name,
+        lastname: user.lastname,
+        address: user.address ?? repoUser.address,
+        identity: user.identity ?? repoUser.identity,
+        email: user.email ?? repoUser.email,
+        password: user.password ?? repoUser.password,
+        role: user.role ?? repoUser.role,
+        avatar: user.avatar,
+      });
+      return await this.usersRepository.findById(id);
+    } catch (error) {
+      if (!error) throw new HttpException('Error al modificar al usuario', HttpStatus.INTERNAL_SERVER_ERROR);
       throw new HttpException(error.message, error.status ?? HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

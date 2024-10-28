@@ -16,7 +16,8 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   async findById(id: string): Promise<User | null> {
-    return this.userModel.findById(id).exec();
+    const _id = new Types.ObjectId(id);
+    return this.userModel.findById(_id).exec();
   }
 
   async findAll(): Promise<User[]> {
