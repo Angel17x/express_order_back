@@ -52,7 +52,11 @@ export class ProductsController {
 
   @Delete('/delete-product')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async delete(@Query() id: string): Promise<void> {
-    await this.productService.delete(id);
+  async delete(
+    @Query() id: string,
+    @Req() req: Request
+  ): Promise<void> {
+    const user = req['user'];
+    await this.productService.delete(id, user);
   }
 }

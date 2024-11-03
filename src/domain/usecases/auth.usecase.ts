@@ -43,7 +43,8 @@ export class AuthUseCase {
         email: repoUser.email,
         password: repoUser.password,
         role: repoUser.role,
-        avatar: avatarUrl
+        avatar: avatarUrl,
+        social: repoUser.social ?? []
       });
       return repoUser;
     } catch (error) {
@@ -72,7 +73,8 @@ export class AuthUseCase {
         email: user.email ?? repoUser.email,
         password: user.password ?? repoUser.password,
         role: user.role ?? repoUser.role,
-        avatar: user.avatar,
+        avatar: user.avatar ?? repoUser.avatar.valueOf(),
+        social: user.social ?? repoUser.social
       });
       return await this.usersRepository.findById(id);
     } catch (error) {

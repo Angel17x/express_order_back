@@ -1,5 +1,7 @@
-import { IsEmail, IsString, Matches, MinLength, IsEnum, IsOptional } from "class-validator";
+import { IsEmail, IsString, Matches, MinLength, IsEnum, IsOptional, IsArray, ValidateNested } from "class-validator";
 import { Role } from "../enums/role.enum";
+import { ISocial } from "src/domain/entities/social.entity";
+import { Type } from "class-transformer";
 
 export class UpdateUserDto {
   @IsOptional()
@@ -38,4 +40,9 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   avatar?: string;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  social?: ISocial[];
 }

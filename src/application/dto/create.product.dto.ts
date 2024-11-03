@@ -1,6 +1,6 @@
 // create-product.dto.ts
 import { Transform } from 'class-transformer';
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Matches, Max, Min, ValidateNested } from 'class-validator';
+import { IsDate, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Matches, Max, Min, ValidateNested } from 'class-validator';
 import { Category } from 'src/application/enums';
 import { IWeight } from 'src/domain/entities/weight.entity';
 import { Type } from '../enums/types.enum';
@@ -50,5 +50,13 @@ export class CreateProductDto {
   @IsString()
   @IsOptional()
   imageUrl?: string;
+
+  @IsDate()
+  @IsOptional()
+  createdAt?: Date;
+  
+  @IsDate()
+  @IsOptional()
+  modifiedAt?: Date;
 
 }

@@ -1,5 +1,6 @@
-import { IsEmail, IsString, Matches, MinLength, IsEnum, IsOptional } from "class-validator";
+import { IsEmail, IsString, Matches, MinLength, IsEnum, IsOptional, IsArray, ValidateNested, ArrayMinSize } from "class-validator";
 import { Role } from "../enums/role.enum";
+import { ISocial } from "src/domain/entities/social.entity";
 
 export class UserDto {
   @IsString()
@@ -31,4 +32,10 @@ export class UserDto {
   @IsOptional()
   @IsString()
   avatar?: string;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @ArrayMinSize(1)
+  social?: ISocial[]
 }

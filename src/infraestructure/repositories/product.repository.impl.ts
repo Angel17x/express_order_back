@@ -13,11 +13,15 @@ export class ProductRepositoryImpl implements ProductRepository {
 
   async findById(id: string, seller: string): Promise<Product | null> {
     const _id = new Types.ObjectId(id);
-    return this.productModel.findOne({ _id, seller }, '-__v').populate({ path: 'seller', select: '-password -__v' }).exec();
+    return this.productModel.findOne({ _id, seller }, '-__v')
+    .populate({ path: 'seller', select: '-password -__v' })
+    .exec();
   }
 
   async findAll(seller: string): Promise<Product[]> {
-    return await this.productModel.find({ seller }, '-__v').populate({ path: 'seller', select: '-password -__v' }).exec();
+    return await this.productModel.find({ seller }, '-__v')
+    .populate({ path: 'seller', select: '-password -__v' })
+    .exec();
   }
 
   async create(entity: CreateProductDto): Promise<Product> {

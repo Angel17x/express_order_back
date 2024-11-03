@@ -22,8 +22,8 @@ export class ProductServiceImpl implements ProductService {
   updateAt(id: string, product: UpdateProductDto, user:User, file?: Express.Multer.File): Promise<boolean> {
     return this.productUseCase.update(id, product, user, file);
   }
-  delete(id: string): Promise<boolean> {
-    return this.productUseCase.delete(id);
+  delete(id: string, user:User): Promise<boolean> {
+    return this.productUseCase.delete(id, user);
   }
   
 }

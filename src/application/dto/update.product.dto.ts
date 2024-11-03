@@ -1,5 +1,5 @@
 // create-product.dto.ts
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
+import { IsDate, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 import { Category } from 'src/application/enums';
 import { Transform } from 'class-transformer';
 import { Type } from '../enums/types.enum';
@@ -55,4 +55,12 @@ export class UpdateProductDto {
 
   @IsNotEmpty()
   seller: string;
+
+  @IsDate()
+  @IsOptional()
+  createdAt?: Date;
+  
+  @IsDate()
+  @IsOptional()
+  modifiedAt?: Date;
 }

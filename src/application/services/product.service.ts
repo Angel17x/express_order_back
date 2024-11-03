@@ -9,5 +9,5 @@ export interface ProductService {
   findById(id: string, seller: string): Promise<Product>;
   create(product: CreateProductDto, user:User, file: Express.Multer.File): Promise<Product>;
   updateAt(id:string, product: UpdateProductDto, user:User, file?: Express.Multer.File): Promise<boolean>;
-  delete(id:string): Promise<boolean>;
+  delete(id:string, user:User): Promise<boolean>;
 }

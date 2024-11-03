@@ -33,7 +33,8 @@ export class UserUseCase {
         identity: user.identity,
         email: user.email,
         role: user.role,
-        avatar: user.avatar
+        avatar: user.avatar,
+        social: user.social ?? []
       }))
       return users;
 
@@ -68,7 +69,9 @@ export class UserUseCase {
           identity: user.identity,
           email: user.email,
           password: user.password,
-          role: user.role
+          role: user.role,
+          avatar: user.avatar,
+          social: user.social ?? []
         }
       );
       return newUser;
@@ -90,7 +93,9 @@ export class UserUseCase {
           identity: user.identity,
           email: user.email,
           password: user.password,
-          role: user.role
+          role: user.role,
+          avatar: user.avatar,
+          social: user.social ?? []
         }
       );
       if(!userUpdated) throw new HttpException('Error updating user', HttpStatus.INTERNAL_SERVER_ERROR)

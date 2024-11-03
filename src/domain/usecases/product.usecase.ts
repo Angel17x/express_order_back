@@ -67,6 +67,8 @@ export class ProductUseCase {
           weight: product.weight,
           type: product.type,
           imageUrl: fileUrl,
+          createdAt: new Date(),
+          modifiedAt: new Date()
         }
       );
       return newProduct;
@@ -99,7 +101,8 @@ export class ProductUseCase {
           weight: product.weight ?? isExistsProduct.weight.weight,
           type: product.type ?? isExistsProduct.weight.type,
           imageUrl: product.imageUrl ?? isExistsProduct.imageUrl,
-          seller: product.seller ?? isExistsProduct.seller.toString()
+          seller: product.seller ?? isExistsProduct.seller.toString(),
+          modifiedAt: new Date()
         }
       );
       if(!productUpdated) throw new HttpException('Error updating product', HttpStatus.INTERNAL_SERVER_ERROR)
@@ -112,8 +115,15 @@ export class ProductUseCase {
     }
   }
 
-  async delete(id: string): Promise<boolean> {
+  async delete(id: string, user: User): Promise<boolean> {
     try {
+      if(!id) throw new HttpException(`Product ID not provided`, HttpStatus.NOT_FOUND);
+      const isExistsProduct = await this.productRepository.findById(id, user._id.toString());
+      if (!isExistsProduct) throw new HttpException(`Product ID does not exist`, HttpStatus.NOT_FOUND);
+      const { imageUrl } = isExistsProduct;
+      if(imageUrl){
+        await this.uploadfile.deleteFile((user._id).toString(), 'product', isExistsProduct.name);
+      }
       const productDeleted = await this.productRepository.delete(id);
       if(!productDeleted) throw new HttpException(`'The product ID you are trying to delete does not exist`, HttpStatus.NOT_FOUND)
       return productDeleted;

@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import mongoose, { Model, Types } from "mongoose";
-import { CreateSalesDto } from "src/application/dto/create-sales.dto";
+import { CreateSalesDto } from "src/application/dto/create.sales.dto";
 import { SalesRepository } from "src/domain/repositories/sales.repository";
 import { Sales } from "src/domain/schemas/sales.schema";
 
@@ -12,14 +12,40 @@ export class SalesRepositoryImpl implements SalesRepository {
     throw new Error("Method not implemented.");
   }
 
-  async findById(id: string): Promise<Sales | null> {
+  async findById(id: string, userId:string): Promise<Sales | null> {
     const _id = new Types.ObjectId(id);
-    return this.salesModel.findOne({ _id }).exec();
+    return this.salesModel.findOne({ _id, user: userId }, '-__v')
+    .populate({ path: 'user', select: '-password -__v' })
+    .populate({ path: 'ecommerce', select: '-password -__v' })
+    .populate({ path: 'productsId', select: '-seller -__v' })
+    .exec();
   }
 
   async findAll(userId: string): Promise<Sales[]> {
     const _id = new Types.ObjectId(userId);
-    return this.salesModel.find({ userId: _id }).exec();
+    return this.salesModel.find({ userId: _id }, '-__v')
+    .populate({ path: 'user', select: '-password -__v' })
+    .populate({ path: 'ecommerce', select: '-password -__v' })
+    .populate({ path: 'productsId', select: '-seller -__v' })
+    .exec();
+  }
+
+  async findAllByEcommerceId(ecommerce: string): Promise<Sales[]> {
+    const _id = new Types.ObjectId(ecommerce);
+    return this.salesModel.find({ ecommerce: _id }, '-__v')
+    .populate({ path: 'user', select: '-password -__v' })
+    .populate({ path: 'ecommerce', select: '-password -__v' })
+    .populate({ path: 'productsId', select: '-seller -__v' })
+    .exec();
+  }
+
+  async findByIdEcommerceId(id: string, ecommerce:string): Promise<Sales | null> {
+    const _id = new Types.ObjectId(id);
+    return this.salesModel.findOne({ _id, ecommerce: ecommerce }, '-__v')
+    .populate({ path: 'user', select: '-password -__v' })
+    .populate({ path: 'ecommerce', select: '-password -__v' })
+    .populate({ path: 'productsId', select: '-seller -__v' })
+    .exec();
   }
 
   async create(entity: CreateSalesDto): Promise<Sales> {

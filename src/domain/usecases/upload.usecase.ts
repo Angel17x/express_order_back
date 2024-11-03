@@ -67,34 +67,24 @@ export class UploadUseCase {
     }
   }
   
-  private async deleteAllFilesInFolder(userId: string, folderType: string): Promise<boolean> {
+  async deleteFile(userId: string, folderType: string, fileName: string): Promise<boolean> {
     try {
-        const containerClient = this.blobServiceClient.getContainerClient(this.containerStorage);
-        const containerExists = await containerClient.exists();
+      const containerClient = this.blobServiceClient.getContainerClient(this.containerStorage);
+      const containerExists = await containerClient.exists();
+      if (!containerExists) {
+        throw new HttpException(`El contenedor '${this.containerStorage}' no existe`, HttpStatus.BAD_REQUEST);
+      }
 
-        if (!containerExists) {
-            throw new HttpException(`El contenedor '${this.containerStorage}' no existe`, HttpStatus.BAD_REQUEST);
-        }
-
-        const prefix = `${userId}/${folderType}/`;
-        let iter = containerClient.listBlobsFlat({ prefix });
-        let blobItem: { name: string; };
-        let allDeleted = true;  // Asumimos que todos se pueden eliminar hasta que se encuentre uno que no
-
-        for await (blobItem of iter) {
-            console.log(blobItem.name)
-            const blobClient = containerClient.getBlobClient(blobItem.name);
-            const deleteResponse = await blobClient.deleteIfExists();
-            if (!deleteResponse.succeeded) {
-                console.log(`No se pudo eliminar el blob: ${blobItem.name}`);
-                allDeleted = false;  // Encuentra un archivo que no pudo ser eliminado
-            }
-        }
-
-        return allDeleted;  // Retorna true si todos fueron eliminados, false si alguno no fue eliminado
+      // Eliminar el archivo viejo si existe
+      const oldBlobClient = containerClient.getBlockBlobClient(`${userId}/${folderType}/${fileName}`);
+      const oldBlobExists = await oldBlobClient.exists();
+      if (!oldBlobExists) {
+        throw new HttpException('file is not exists', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+      await oldBlobClient.delete();
+      return true;
     } catch (error) {
-        console.error('Error al eliminar los archivos:', error);
-        throw new HttpException(error.message, error.status ?? HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(error.message, error.status?? HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
